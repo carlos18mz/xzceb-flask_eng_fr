@@ -11,7 +11,7 @@ url = os.environ['url']
 
 authenticator = IAMAuthenticator(apikey)
 language_translator = LanguageTranslatorV3(
-    version='{version}',
+    version='2018-05-01',
     authenticator=authenticator
 )
 
@@ -19,11 +19,20 @@ language_translator.set_service_url(url)
 
 
 def english_to_french(english_text):
-    #write the code here
-    french_text = 'Bonjour' if english_text is not None else None
-    return french_text
+    if(english_text == None):
+        return None
+    french_text = language_translator.translate(
+        text=english_text,
+        model_id='en-fr'
+    ).get_result()
+    return french_text.get("translations")[0].get("translation")
 
 def french_to_english(french_text):
-    #write the code here
-    english_text = 'Hello' if french_text is not None else None
-    return english_text
+    if(french_text ==  None):
+        return None
+    english_text = language_translator.translate(
+        text=french_text,
+        model_id='fr-en'
+    ).get_result()
+    return english_text.get("translations")[0].get("translation")
+
